@@ -27,7 +27,7 @@ jobs:
         run: cargo build --release --target x86_64-unknown-linux-musl
 
       - name: Create ZIP file
-        run: zip -j lambda.zip target/x86_64-unknown-linux-musl/release/your_lambda_function
+        run: zip -j lambda.zip target/x86_64-unknown-linux-musl/release/rusty-lambda
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
