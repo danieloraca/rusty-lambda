@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  RustLambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      FunctionName: dan-rusty-lambda
+      Handler: bootstrap
+      Role: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}
+      Code:
+        S3Bucket: ${{ secrets.AWS_BUCKET }}
+        S3Key: path/to/your/lambda.zip
+      Runtime: provided.al2
+      Timeout: 30
