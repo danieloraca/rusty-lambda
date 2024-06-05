@@ -5,10 +5,8 @@ Resources:
     Properties:
       FunctionName: rusty-lambda
       Handler: bootstrap
-      # Role: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}
       Role: PLACEHOLDER_ROLE_ARN
       Code:
-        # S3Bucket: ${{ secrets.AWS_BUCKET }}
         S3Bucket: PLACEHOLDER_S3_BUCKET
         S3Key: lambda/lambda.zip
       Runtime: provided.al2
