@@ -4,7 +4,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       FunctionName: rusty-lambda
-      Handler: bootstrap
+      Handler: rusty-lambda
       # Role: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}
       Role: PLACEHOLDER_ROLE_ARN
       Code:
