@@ -26,13 +26,13 @@ jobs:
       - name: Build with Cargo
         run: cargo build --release --target x86_64-unknown-linux-musl
 
-      # - name: Rename and create ZIP file
-      #   run: |
-      #     cp target/x86_64-unknown-linux-musl/release/rusty-lambda bootstrap
-      #     zip lambda.zip bootstrap
+      - name: Rename and create ZIP file
+        run: |
+          mv target/x86_64-unknown-linux-musl/release/rusty-lambda bootstrap
+          zip lambda.zip bootstrap
 
-      - name: Create ZIP file
-        run: zip -j lambda.zip target/x86_64-unknown-linux-musl/release/rusty-lambda
+      # - name: Create ZIP file
+      #   run: zip -j lambda.zip target/x86_64-unknown-linux-musl/release/rusty-lambda
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
