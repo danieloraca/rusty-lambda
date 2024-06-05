@@ -41,8 +41,8 @@ jobs:
 
       - name: Replace placeholders in CloudFormation template
         run: |
-          sed -i 's|PLACEHOLDER_ROLE_ARN|arn:aws:iam::${{ env.AWS_ACCOUNT }}:role/${{ env.AWS_LAMBDA_EXECUTION_ROLE }}|' cloudformation-template.yml
-          sed -i 's|PLACEHOLDER_S3_BUCKET|${{ env.AWS_BUCKET }}|' cloudformation-template.yml
+          sed -i 's|PLACEHOLDER_ROLE_ARN|arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}|' cloudformation-template.yml
+          sed -i 's|PLACEHOLDER_S3_BUCKET|${{ secrets.AWS_BUCKET }}|' cloudformation-template.yml
 
       - name: Verify the CloudFormation template
         run: cat cloudformation-template.yml
