@@ -16,7 +16,7 @@ struct Response {
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Extract some useful info from the request
     let command = event.payload.command;
-    println!("Incoming command: {}", command);
+    println!("Incoming command:: {}", command);
 
     // Prepare the response
     let resp = Response {
