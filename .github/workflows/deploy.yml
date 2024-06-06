@@ -56,5 +56,5 @@ jobs:
         run: |
           aws cloudformation deploy \
             --template-file cloudformation-template.yml \
-            --stack-name dan-stack2 \
+            --stack-name dan-stack \
             --capabilities CAPABILITY_IAM
