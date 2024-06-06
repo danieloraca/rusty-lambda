@@ -16,12 +16,12 @@ struct Response {
 async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
     // Extract some useful info from the request
     let command = event.payload.command;
-    println!("Incoming command:: {}", command);
+    println!("Incoming command: {}", command);
 
     // Prepare the response
     let resp = Response {
         req_id: event.context.request_id,
-        msg: format!("Hello with command {}.", command),
+        msg: format!("Hello edit with command {}.", command),
     };
 
     // Return `Response` (it will be serialized to JSON automatically by the runtime)
