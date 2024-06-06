@@ -60,7 +60,7 @@ jobs:
           set -x  # Enable debug mode
           aws cloudformation deploy \
             --template-file cloudformation-template.yml \
-            --stack-name dan-stack \
+            --stack-name dan-stack2 \
             --capabilities CAPABILITY_IAM
             --no-fail-on-empty-changeset
           set +x
