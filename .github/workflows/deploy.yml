@@ -31,8 +31,8 @@ jobs:
           mv target/x86_64-unknown-linux-musl/release/rusty-lambda bootstrap
           zip lambda.zip bootstrap
 
-      # - name: Create ZIP file
-      #   run: zip -j lambda.zip target/x86_64-unknown-linux-musl/release/rusty-lambda
+      - name: Verify ZIP file contents
+        run: unzip -l lambda.zip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -42,22 +42,24 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        run: aws s3 cp lambda.zip s3://${{ secrets.AWS_BUCKET }}/lambda/lambda.zip
+        run: |
+          TIMESTAMP=$(date +%s)
+          aws s3 cp lambda.zip s3://${{ secrets.AWS_BUCKET }}/lambda/lambda-$TIMESTAMP.zip
+          echo "::set-output name=s3_key::lambda/lambda-$TIMESTAMP.zip"
 
       - name: Replace placeholders in CloudFormation template
         run: |
           sed -i 's|PLACEHOLDER_ROLE_ARN|arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}|' cloudformation-template.yml
           sed -i 's|PLACEHOLDER_S3_BUCKET|${{ secrets.AWS_BUCKET }}|' cloudformation-template.yml
+          sed -i 's|lambda/lambda.zip|lambda/lambda-$TIMESTAMP.zip|' cloudformation-template.yml
 
       - name: Verify the CloudFormation template
         run: cat cloudformation-template.yml
 
       - name: Deploy CloudFormation stack
         run: |
-          set -x  # Enable debug mode
           aws cloudformation deploy \
             --template-file cloudformation-template.yml \
             --stack-name dan-stack \
-            --capabilities CAPABILITY_IAM
+            --capabilities CAPABILITY_IAM \
             --no-fail-on-empty-changeset
-          set +x

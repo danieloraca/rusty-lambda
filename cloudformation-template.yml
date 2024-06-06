@@ -10,4 +10,5 @@ Resources:
         S3Bucket: PLACEHOLDER_S3_BUCKET
         S3Key: lambda/lambda.zip
       Runtime: provided.al2
+      MemorySize: 128
       Timeout: 30
