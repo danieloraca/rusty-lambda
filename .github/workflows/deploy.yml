@@ -45,6 +45,7 @@ jobs:
         run: |
           TIMESTAMP=$(date +%s)
           aws s3 cp lambda.zip s3://${{ secrets.AWS_BUCKET }}/lambda/lambda-$TIMESTAMP.zip
+          sed -i "s|lambda.zip|lambda-$TIMESTAMP.zip|" cloudformation-template.yml
           echo "::set-output name=s3_key::lambda/lambda-$TIMESTAMP.zip"
 
       - name: Replace placeholders in CloudFormation template
