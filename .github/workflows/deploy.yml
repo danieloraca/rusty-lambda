@@ -63,5 +63,4 @@ jobs:
             --template-file cloudformation-template.yml \
             --stack-name dan-stack \
             --capabilities CAPABILITY_IAM
-            --no-fail-on-empty-changeset
           set +x
