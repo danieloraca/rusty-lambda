@@ -3,7 +3,7 @@ Resources:
   RustS3Bucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: PLACEHOLDER_S3_BUCKET
+      BucketName: PLACEHOLDER_S3_IMAGES_BUCKET
 
   RustLambdaFunction:
     Type: "AWS::Lambda::Function"
@@ -12,7 +12,7 @@ Resources:
       Handler: bootstrap
       Role: PLACEHOLDER_ROLE_ARN
       Code:
-        S3Bucket: PLACEHOLDER_S3_BUCKET
+        S3Bucket: PLACEHOLDER_S3_DEPLOY_BUCKET
         S3Key: lambda/lambda.zip
       Runtime: provided.al2
       MemorySize: 128
@@ -35,4 +35,4 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "*"
-                Resource: PLACEHOLDER_S3_ARN
+                Resource: PLACEHOLDER_S3_IMGES_BUCKET_ARN
