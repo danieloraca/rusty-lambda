@@ -1,4 +1,3 @@
-mod routes;
 use lambda_runtime::{run, service_fn, tracing, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
