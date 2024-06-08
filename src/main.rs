@@ -1,7 +1,7 @@
+mod routes;
 use lambda_runtime::{run, service_fn, tracing, Error, LambdaEvent};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-
 #[derive(Deserialize)]
 struct Request {
     command: String,
@@ -16,6 +16,7 @@ struct Response {
 async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     let payload: Value = event.payload;
 
+    routes::health().await;
     let body_json: Value = serde_json::from_str(
         payload["body"]
             .as_str()
@@ -39,7 +40,7 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
 
     let resp_json = serde_json::to_string(&resp)?;
 
-    tracing::info!("Response: {}", resp_json);
+    tracing::info!("Response in CloudWatch: {}", resp_json);
 
     Ok(serde_json::json!({
         "statusCode": 200,
