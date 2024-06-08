@@ -14,8 +14,7 @@ struct Response {
 }
 
 async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
-    // Extract some useful info from the request
-    let payload = event.payload;
+    let payload: Value = event.payload;
 
     let body_json: Value = serde_json::from_str(
         payload["body"]
@@ -28,13 +27,19 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         .as_str()
         .ok_or_else(|| anyhow::anyhow!("No image url found in payload"))?;
 
+    let image_new_size = body_json["image_new_size"]
+        .as_str()
+        .ok_or_else(|| anyhow::anyhow!("No image new size found in payload"))?;
+
     // Prepare the response
     let resp = Response {
         req_id: event.context.request_id,
-        msg: format!("Hello danstack with command {}.", image_url),
+        msg: format!("Resized image {} to size {}", image_url, image_new_size),
     };
 
     let resp_json = serde_json::to_string(&resp)?;
+
+    tracing::info!("Response: {}", resp_json);
 
     Ok(serde_json::json!({
         "statusCode": 200,
