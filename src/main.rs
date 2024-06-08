@@ -16,7 +16,6 @@ struct Response {
 async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     let payload: Value = event.payload;
 
-    routes::health().await;
     let body_json: Value = serde_json::from_str(
         payload["body"]
             .as_str()
