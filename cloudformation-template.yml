@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Resources:
+  RustS3Bucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: PLACEHOLDER_S3_BUCKET
+
   RustLambdaFunction:
     Type: "AWS::Lambda::Function"
     Properties:
@@ -12,11 +17,6 @@ Resources:
       Runtime: provided.al2
       MemorySize: 128
       Timeout: 30
-
-  RustS3Bucket:
-    Type: "AWS::S3::Bucket"
-    Properties:
-      BucketName: PLACEHOLDER_S3_BUCKET
 
   RustLambdaExecutionRole:
     Type: "AWS::IAM::Role"
@@ -35,4 +35,4 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: "*"
-                Resource: !Sub "arn:aws:s3:::${PLACEHOLDER_S3_BUCKET}/*"
+                Resource: PLACEHOLDER_S3_ARN

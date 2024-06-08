@@ -52,6 +52,7 @@ jobs:
         run: |
           sed -i 's|PLACEHOLDER_ROLE_ARN|arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/${{ secrets.AWS_LAMBDA_EXECUTION_ROLE }}|' cloudformation-template.yml
           sed -i 's|PLACEHOLDER_S3_BUCKET|${{ secrets.AWS_BUCKET }}|' cloudformation-template.yml
+          sed -i 's|PLACEHOLDER_S3_ARN|arn:aws:s3:::${{ secrets.AWS_BUCKET }}/*|' cloudformation-template.yml
 
       - name: Verify the CloudFormation template
         run: cat cloudformation-template.yml
