@@ -1,6 +1,6 @@
 use lambda_runtime::{run, service_fn, tracing, Error, LambdaEvent};
-
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
 
 #[derive(Deserialize)]
 struct Request {
@@ -13,19 +13,33 @@ struct Response {
     msg: String,
 }
 
-async fn function_handler(event: LambdaEvent<Request>) -> Result<Response, Error> {
+async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     // Extract some useful info from the request
-    let command = event.payload.command;
-    println!("Incoming command: {}", command);
+    let payload = event.payload;
+
+    let body_json: Value = serde_json::from_str(
+        payload["body"]
+            .as_str()
+            .ok_or_else(|| anyhow::anyhow!("Invalid body"))?,
+    )
+    .map_err(|e| -> Error { anyhow::anyhow!("Error parsing JSON: {}", e).into() })?;
+
+    let image_url = body_json["image_url"]
+        .as_str()
+        .ok_or_else(|| anyhow::anyhow!("No image url found in payload"))?;
 
     // Prepare the response
     let resp = Response {
         req_id: event.context.request_id,
-        msg: format!("Hello danstack with command {}.", command),
+        msg: format!("Hello danstack with command {}.", image_url),
     };
 
-    // Return `Response` (it will be serialized to JSON automatically by the runtime)
-    Ok(resp)
+    let resp_json = serde_json::to_string(&resp)?;
+
+    Ok(serde_json::json!({
+        "statusCode": 200,
+        "body": resp_json,
+    }))
 }
 
 #[tokio::main]
