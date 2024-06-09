@@ -35,15 +35,28 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         .as_str()
         .ok_or_else(|| anyhow::anyhow!("No image new size found in payload"))?;
 
-    // let bucket_name = std::env::var("THE_BUCKET_NAME")?;
-    // let region = std::env::var("THE_REGION")?;
-    // let config = aws_config::load_from_env().await;
-    // let client = Client::new(&config);
+    let bucket_name = std::env::var("THE_BUCKET_NAME")?;
+    let region = std::env::var("THE_REGION")?;
+    let config = aws_config::load_from_env().await;
+    let client = Client::new(&config);
 
-    // let resp = get(image_url).await?;
-    // let image_bytes = resp.bytes().await?;
+    let resp = get(image_url).await?;
+    let image_bytes = resp.bytes().await?;
 
-    // let file_name = "uploaded_image.jpg";
+    // Upload the image to S3
+    let file_name = "uploaded_image.jpg";
+    let image_url = format!(
+        "https://{}.s3.{}.amazonaws.com/{}",
+        bucket_name, region, file_name
+    );
+    client
+        .put_object()
+        .bucket(&bucket_name)
+        .key(file_name)
+        .body(ByteStream::from(image_bytes.to_vec()))
+        .send()
+        .await?;
+
     // client
     //     .put_object()
     //     .bucket(&bucket_name)
