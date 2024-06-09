@@ -19,6 +19,7 @@ struct Response {
 
 async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     let payload: Value = event.payload;
+    tracing::info!("Payload: {}", payload);
 
     let body_json: Value = serde_json::from_str(
         payload["body"]
@@ -26,19 +27,23 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
             .ok_or_else(|| anyhow::anyhow!("Invalid body"))?,
     )
     .map_err(|e| -> Error { anyhow::anyhow!("Error parsing JSON: {}", e).into() })?;
+    tracing::info!("Body JSON: {}", body_json);
 
     let image_url = body_json["image_url"]
         .as_str()
         .ok_or_else(|| anyhow::anyhow!("No image url found in payload"))?;
+    tracing::info!("Image URL: {}", image_url);
 
     let image_new_size = body_json["image_new_size"]
         .as_str()
         .ok_or_else(|| anyhow::anyhow!("No image new size found in payload"))?;
+    tracing::info!("Image new size: {}", image_new_size);
 
     let bucket_name = std::env::var("THE_BUCKET_NAME")?;
     let region = std::env::var("THE_REGION")?;
     let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
     let client = Client::new(&config);
+    tracing::info!("Client created");
 
     let resp = get(image_url).await?;
     let image_bytes = resp.bytes().await?;
