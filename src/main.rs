@@ -49,6 +49,7 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         "https://{}.s3.{}.amazonaws.com/{}",
         bucket_name, region, file_name
     );
+    tracing::info!("Uploading image to {}", image_url);
     client
         .put_object()
         .bucket(&bucket_name)
