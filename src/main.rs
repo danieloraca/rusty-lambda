@@ -40,9 +40,8 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     tracing::info!("Image new size: {}", image_new_size);
 
     let bucket_name = std::env::var("THE_BUCKET_NAME").expect("THE_BUCKET_NAME must be set");
-    let region = std::env::var("THE_REGION").expect("THE_REGION must be set");
     tracing::info!("Bucket name: {}", bucket_name);
-    tracing::info!("Region: {}", region);
+
     let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
     let client = Client::new(&config);
     tracing::info!("Client created");
@@ -52,11 +51,7 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
 
     // Upload the image to S3
     let file_name = "uploaded_image.jpg";
-    let image_url = format!(
-        "https://{}.s3.{}.amazonaws.com/{}",
-        bucket_name, region, file_name
-    );
-    tracing::info!("Uploading image to {}", image_url);
+
     client
         .put_object()
         .bucket(&bucket_name)
@@ -64,14 +59,6 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         .body(ByteStream::from(image_bytes.to_vec()))
         .send()
         .await?;
-
-    // client
-    //     .put_object()
-    //     .bucket(&bucket_name)
-    //     .key(file_name)
-    //     .body(ByteStream::from(image_bytes.to_vec()))
-    //     .send()
-    //     .await?;
 
     // Prepare the response
     let resp = Response {
