@@ -3,14 +3,15 @@ use aws_sdk_s3::primitives::ByteStream;
 use aws_sdk_s3::Client;
 use lambda_runtime::{run, service_fn, tracing, Error, LambdaEvent};
 use reqwest::get;
-use serde::{Deserialize, Serialize};
+// use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use serde_json::Value;
 use url::Url;
 
-#[derive(Deserialize)]
-struct Request {
-    command: String,
-}
+// #[derive(Deserialize)]
+// struct Request {
+//     command: String,
+// }
 
 #[derive(Serialize)]
 struct Response {
