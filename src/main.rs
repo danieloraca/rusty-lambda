@@ -41,6 +41,8 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
 
     let bucket_name = std::env::var("THE_BUCKET_NAME")?;
     let region = std::env::var("THE_REGION")?;
+    tracing::info!("Bucket name: {}", bucket_name);
+    tracing::info!("Region: {}", region);
     let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
     let client = Client::new(&config);
     tracing::info!("Client created");
