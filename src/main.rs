@@ -5,6 +5,7 @@ use lambda_runtime::{run, service_fn, tracing, Error, LambdaEvent};
 use reqwest::get;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use url::Url;
 
 #[derive(Deserialize)]
 struct Request {
@@ -50,12 +51,28 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     let image_bytes = resp.bytes().await?;
 
     // Upload the image to S3
-    let file_name = "uploaded_image.jpg";
+    // let mut img_name = "uploaded_image.jpg";
+
+    let image_name = match Url::parse(image_url) {
+        Ok(parsed_url) => {
+            if let Some(name) = parsed_url
+                .path_segments()
+                .and_then(|segments| segments.last())
+            {
+                name.to_string()
+            } else {
+                return Err("No image name found in the URL.".into());
+            }
+        }
+        Err(e) => {
+            return Err(format!("Failed to parse URL: {}", e).into());
+        }
+    };
 
     client
         .put_object()
         .bucket(&bucket_name)
-        .key(file_name)
+        .key(image_name)
         .body(ByteStream::from(image_bytes.to_vec()))
         .send()
         .await?;
