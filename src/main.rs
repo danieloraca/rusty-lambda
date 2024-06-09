@@ -39,8 +39,8 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         .ok_or_else(|| anyhow::anyhow!("No image new size found in payload"))?;
     tracing::info!("Image new size: {}", image_new_size);
 
-    let bucket_name = std::env::var("THE_BUCKET_NAME")?;
-    let region = std::env::var("THE_REGION")?;
+    let bucket_name = std::env::var("THE_BUCKET_NAME").expect("THE_BUCKET_NAME must be set");
+    let region = std::env::var("THE_REGION").expect("THE_REGION must be set");
     tracing::info!("Bucket name: {}", bucket_name);
     tracing::info!("Region: {}", region);
     let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
