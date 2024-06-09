@@ -17,6 +17,10 @@ Resources:
       Runtime: provided.al2
       MemorySize: 128
       Timeout: 30
+      Environment:
+        Variables:
+          THE_BUCKET_NAME: PLACEHOLDER_S3_IMAGES_BUCKET
+          THE_BUCKET_REGION: PLACEHOLDER_S3_REGION
 
   RustLambdaExecutionRole:
     Type: "AWS::IAM::Role"
