@@ -1,4 +1,4 @@
-use aws_config;
+use aws_config::{self, BehaviorVersion};
 use aws_sdk_s3::primitives::ByteStream;
 use aws_sdk_s3::Client;
 use lambda_runtime::{run, service_fn, tracing, Error, LambdaEvent};
@@ -37,7 +37,7 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
 
     let bucket_name = std::env::var("THE_BUCKET_NAME")?;
     let region = std::env::var("THE_REGION")?;
-    let config = aws_config::load_from_env().await;
+    let config = aws_config::load_defaults(BehaviorVersion::latest()).await;
     let client = Client::new(&config);
 
     let resp = get(image_url).await?;
