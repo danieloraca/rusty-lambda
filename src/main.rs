@@ -37,10 +37,11 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         .await?;
 
     // Prepare the response
-    // let resp = LambdaResponse {
-    //     req_id: event.context.request_id,
-    //     msg: format!("Uploaded image {}", image_url),
-    // };
+    let resp = LambdaResponse {
+        req_id: event.context.request_id,
+        // msg: format!("Uploaded image {}", image_url),
+        msg: format!("Uploaded image ..."),
+    };
 
     let resp_json = serde_json::to_string(&resp)?;
 
