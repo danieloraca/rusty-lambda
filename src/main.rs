@@ -25,7 +25,7 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
     let client = Client::new(&config);
     tracing::info!("Client created");
 
-    let resp = get(&image_url).await?;
+    let resp = get(image_url).await?;
     let image_bytes = resp.bytes().await?;
 
     client
@@ -37,10 +37,10 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
         .await?;
 
     // Prepare the response
-    let resp = LambdaResponse {
-        req_id: event.context.request_id,
-        msg: format!("Uploaded image {}", image_url),
-    };
+    // let resp = LambdaResponse {
+    //     req_id: event.context.request_id,
+    //     msg: format!("Uploaded image {}", image_url),
+    // };
 
     let resp_json = serde_json::to_string(&resp)?;
 
