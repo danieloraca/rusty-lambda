@@ -37,7 +37,6 @@ async fn function_handler(event: LambdaEvent<Value>) -> Result<Value, Error> {
 
     let bucket_name: String =
         std::env::var("THE_BUCKET_NAME").expect("THE_BUCKET_NAME must be set");
-    tracing::info!("Bucket name: {}", bucket_name);
 
     let image_name: String = match Url::parse(image_url) {
         Ok(parsed_url) => {
